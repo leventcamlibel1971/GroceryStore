@@ -36,7 +36,7 @@ namespace GroceryStoreAPI.Controllers
             return Ok(customersResponse);
         }
 
-        [ModelStateValidate]
+        [ServiceFilter(typeof(ModelStateValidate))]
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request)
         {
@@ -45,7 +45,7 @@ namespace GroceryStoreAPI.Controllers
             return CreatedAtAction(nameof(GetCustomer), new {id = createResponse.Customer.Id}, createResponse);
         }
 
-        [ModelStateValidate]
+        [ServiceFilter(typeof(ModelStateValidate))]
         [HttpPut]
         public async Task<IActionResult> UpdateCustomer([FromBody] UpdateCustomerRequest request)
         {

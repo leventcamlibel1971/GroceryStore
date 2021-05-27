@@ -35,12 +35,16 @@ namespace GroceryStoreAPI
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "GroceryStoreAPI", Version = "v1"});
             });
 
+
             services.AddDbContextFactory<GroceryStoreDbContext>(
                 options =>
                     options.UseSqlite("Data Source=GroceryStoreDB.db;"));
 
 
             services.AddMediatR(typeof(GetCustomerHandler));
+
+            services.AddScoped<ExceptionFilter>();
+            services.AddScoped<ModelStateValidate>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

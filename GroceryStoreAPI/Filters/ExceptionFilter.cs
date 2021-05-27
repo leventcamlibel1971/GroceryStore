@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Text.Json;
 using GroceryStoreAPI.Operation.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace GroceryStoreAPI.Filters
 {
@@ -11,12 +13,13 @@ namespace GroceryStoreAPI.Filters
     public class ExceptionFilter : ExceptionFilterAttribute
     {
         private readonly IHostEnvironment _hostingEnv;
+        private readonly ILogger<ExceptionFilter> _logger;
 
-        public ExceptionFilter(IHostEnvironment hostingEnv)
+        public ExceptionFilter(IHostEnvironment hostingEnv, ILogger<ExceptionFilter> logger)
         {
             _hostingEnv = hostingEnv;
+            _logger = logger;
         }
-
 
         public override void OnException(ExceptionContext context)
         {
@@ -35,11 +38,14 @@ namespace GroceryStoreAPI.Filters
             if (!_hostingEnv.IsDevelopment())
                 stackTrace = "";
 
-            context.Result = new JsonResult(new
+            var result = new
             {
                 error = new[] {context.Exception.Message},
-                stackTrace = stackTrace
-            });
+                stackTrace
+            };
+            context.Result = new JsonResult(result);
+
+            _logger.LogError(JsonSerializer.Serialize(result));
         }
     }
 }
