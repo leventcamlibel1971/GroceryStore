@@ -31,7 +31,7 @@ namespace GroceryStoreAPI.Operation.Handlers
                 .SingleOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            if (customer == null) throw new BadRequestException("Record is not found");
+            if (customer == null) throw new EntityNotFoundException("Record is not found");
 
             CustomerProjection.UpdateEntity(customer, request);
 

@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using GroceryStoreAPI.Entity;
+using GroceryStoreAPI.Filters;
 using GroceryStoreAPI.Operation.Handlers;
 using GroceryStoreAPI.ViewModel.Requests;
 using MediatR;
@@ -25,7 +26,8 @@ namespace GroceryStoreAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
+            services.AddControllers(options => options.Filters.Add(typeof(ExceptionFilter)))
+                .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetCustomerRequestValidator>());
 
             services.AddSwaggerGen(c =>
@@ -46,7 +48,6 @@ namespace GroceryStoreAPI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GroceryStoreAPI v1"));
             }

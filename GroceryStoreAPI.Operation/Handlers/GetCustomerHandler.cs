@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GroceryStoreAPI.Entity;
 using GroceryStoreAPI.Operation.Projections;
+using GroceryStoreAPI.Operation.Utility;
 using GroceryStoreAPI.ViewModel.Requests;
 using GroceryStoreAPI.ViewModel.Responses;
 using MediatR;
@@ -28,6 +29,9 @@ namespace GroceryStoreAPI.Operation.Handlers
                 .Select(CustomerProjection.ToViewModel)
                 .SingleOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
+
+            if (customer == null)
+                throw new EntityNotFoundException("customer is not found.");
 
             return new GetCustomerResponse
             {
