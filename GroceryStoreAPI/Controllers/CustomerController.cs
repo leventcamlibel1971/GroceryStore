@@ -19,7 +19,7 @@ namespace GroceryStoreAPI.Controllers
 
         [ServiceFilter(typeof(ModelStateValidate))]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetCustomer(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var customerResponse = await _mediator.Send(new GetCustomerRequest
             {
@@ -39,16 +39,16 @@ namespace GroceryStoreAPI.Controllers
 
         [ServiceFilter(typeof(ModelStateValidate))]
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request)
+        public async Task<IActionResult> Post([FromBody] CreateCustomerRequest request)
         {
             var createResponse = await _mediator.Send(request);
 
-            return CreatedAtAction(nameof(GetCustomer), new {id = createResponse.Customer.Id}, createResponse);
+            return CreatedAtAction(nameof(Get), new {id = createResponse.Customer.Id}, createResponse);
         }
 
         [ServiceFilter(typeof(ModelStateValidate))]
         [HttpPut]
-        public async Task<IActionResult> UpdateCustomer([FromBody] UpdateCustomerRequest request)
+        public async Task<IActionResult> Put([FromBody] UpdateCustomerRequest request)
         {
             var updateResponse = await _mediator.Send(request);
 

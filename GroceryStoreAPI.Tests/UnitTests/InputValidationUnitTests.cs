@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GroceryStoreAPI.ViewModel.Requests;
 using Xunit;
 
@@ -20,8 +15,8 @@ namespace GroceryStoreAPI.Tests.UnitTests
             {
                 Id = 1
             };
-           var validated= validator.Validate(request);
-           validated.IsValid.Should().BeTrue();
+            var validated = validator.Validate(request);
+            validated.IsValid.Should().BeTrue();
         }
 
         [Fact]
@@ -33,7 +28,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
             {
                 Id = 0
             };
-            var validated= validator.Validate(request);
+            var validated = validator.Validate(request);
             validated.IsValid.Should().BeFalse();
         }
 
@@ -45,9 +40,9 @@ namespace GroceryStoreAPI.Tests.UnitTests
             var request = new UpdateCustomerRequest
             {
                 Id = 1,
-                Name="test"
+                Name = "test"
             };
-            var validated= validator.Validate(request);
+            var validated = validator.Validate(request);
             validated.IsValid.Should().BeTrue();
         }
 
@@ -59,9 +54,9 @@ namespace GroceryStoreAPI.Tests.UnitTests
             var request = new UpdateCustomerRequest
             {
                 Id = 5,
-                Name=null
+                Name = null
             };
-            var validated= validator.Validate(request);
+            var validated = validator.Validate(request);
             validated.IsValid.Should().BeFalse();
         }
 
@@ -72,9 +67,9 @@ namespace GroceryStoreAPI.Tests.UnitTests
 
             var request = new CreateCustomerRequest
             {
-                Name="test"
+                Name = "test"
             };
-            var validated= validator.Validate(request);
+            var validated = validator.Validate(request);
             validated.IsValid.Should().BeTrue();
         }
 
@@ -85,9 +80,9 @@ namespace GroceryStoreAPI.Tests.UnitTests
 
             var request = new CreateCustomerRequest
             {
-                Name=null
+                Name = null
             };
-            var validated= validator.Validate(request);
+            var validated = validator.Validate(request);
             validated.IsValid.Should().BeFalse();
         }
     }

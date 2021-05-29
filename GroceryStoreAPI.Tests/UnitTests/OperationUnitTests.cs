@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using GroceryStoreAPI.Operation.Handlers;
@@ -11,7 +8,8 @@ using Xunit;
 
 namespace GroceryStoreAPI.Tests.UnitTests
 {
-    public class OperationUnitTests:DatabaseFixture
+    [Collection("Sequential")]
+    public class OperationUnitTests : DatabaseFixture
     {
         [Fact]
         public async Task GetCustomerHandle_Should_Return_Data()
@@ -20,8 +18,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
             var customerResponse = await getCustomerHandler.Handle(new GetCustomerRequest
             {
                 Id = 1
-                
-            },default);
+            }, default);
 
             customerResponse.Customer.Should().NotBeNull();
             customerResponse.Customer.Id.Should().Be(1);
@@ -31,34 +28,34 @@ namespace GroceryStoreAPI.Tests.UnitTests
         public async Task GetCustomerHandle_Should_Throw_Exception()
         {
             var getCustomerHandler = new GetCustomerHandler(dbContextFactory);
-            Exception ex =await Assert.ThrowsAsync<EntityNotFoundException>(() => getCustomerHandler.Handle(new GetCustomerRequest
-            {
-                Id = 0
-                
-            },default));
+            Exception ex = await Assert.ThrowsAsync<EntityNotFoundException>(() =>
+                getCustomerHandler.Handle(new GetCustomerRequest
+                {
+                    Id = 0
+                }, default));
 
             ex.Message.Should().Be("customer is not found.");
         }
+
         [Fact]
         public async Task QueryCustomerHandle_Should_Return_Data()
         {
             var queryCustomerHandler = new QueryCustomerHandler(dbContextFactory);
-            var queryCustomerResponse = await queryCustomerHandler.Handle(new QueryCustomerRequest(),default);
+            var queryCustomerResponse = await queryCustomerHandler.Handle(new QueryCustomerRequest(), default);
 
             queryCustomerResponse.Customers.Should().NotBeNull();
-            queryCustomerResponse.Customers.Count.Should().Be(3);
+            queryCustomerResponse.Customers.Count.Should().Be(6);
         }
 
         [Fact]
         public async Task UpdateCustomerCommand_Should_Update_Name()
         {
-
             var updateCustomerCommand = new UpdateCustomerCommand(dbContextFactory);
 
             var customerName = Guid.NewGuid().ToString();
             var updateCustomerResponse = await updateCustomerCommand.Handle(new UpdateCustomerRequest
             {
-                Id =1,
+                Id = 1,
                 Name = customerName
             }, default);
 
@@ -67,8 +64,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
             var customerAfterUpdatedResponse = await getCustomerHandler.Handle(new GetCustomerRequest
             {
                 Id = 1
-                
-            },default);
+            }, default);
 
             updateCustomerResponse.Customer.Id.Should().Be(customerAfterUpdatedResponse.Customer.Id);
             updateCustomerResponse.Customer.Name.Should().Be(customerName);
@@ -81,12 +77,12 @@ namespace GroceryStoreAPI.Tests.UnitTests
 
             var customerName = Guid.NewGuid().ToString();
 
-            Exception ex =await Assert.ThrowsAsync<EntityNotFoundException>(() => updateCustomerCommand.Handle(new UpdateCustomerRequest
-            {
-                Id = 0,
-                Name = customerName
-                
-            },default));
+            Exception ex = await Assert.ThrowsAsync<EntityNotFoundException>(() =>
+                updateCustomerCommand.Handle(new UpdateCustomerRequest
+                {
+                    Id = 0,
+                    Name = customerName
+                }, default));
 
             ex.Message.Should().Be("Record is not found");
         }
@@ -94,7 +90,6 @@ namespace GroceryStoreAPI.Tests.UnitTests
         [Fact]
         public async Task CreateCustomerCommand_Should_Create_Record()
         {
-
             var createCustomerCommand = new CreateCustomerCommand(dbContextFactory);
 
             var customerName = Guid.NewGuid().ToString();
@@ -108,8 +103,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
             var customerAfterUpdatedResponse = await getCustomerHandler.Handle(new GetCustomerRequest
             {
                 Id = createCustomerResponse.Customer.Id
-                
-            },default);
+            }, default);
 
             createCustomerResponse.Customer.Id.Should().Be(customerAfterUpdatedResponse.Customer.Id);
             createCustomerResponse.Customer.Name.Should().Be(customerName);

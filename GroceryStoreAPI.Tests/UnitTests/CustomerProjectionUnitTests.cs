@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GroceryStoreAPI.Entity.Domain;
 using GroceryStoreAPI.Operation.Projections;
-using GroceryStoreAPI.ViewModel;
 using GroceryStoreAPI.ViewModel.Requests;
 using Xunit;
 
@@ -23,7 +16,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
                 Name = "Test"
             };
 
-            var customer=CustomerProjection.CreateEntity(createCustomerRequest);
+            var customer = CustomerProjection.CreateEntity(createCustomerRequest);
 
             customer.Name.Should().Be(createCustomerRequest.Name);
         }
@@ -39,7 +32,7 @@ namespace GroceryStoreAPI.Tests.UnitTests
             {
                 Name = "Joe"
             };
-            CustomerProjection.UpdateEntity(customer,updateCustomerRequest);
+            CustomerProjection.UpdateEntity(customer, updateCustomerRequest);
 
             customer.Name.Should().Be(updateCustomerRequest.Name);
         }

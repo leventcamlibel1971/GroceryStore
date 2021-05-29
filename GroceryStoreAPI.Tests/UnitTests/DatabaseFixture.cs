@@ -27,12 +27,16 @@ namespace GroceryStoreAPI.Tests.UnitTests
             {
                 new() {Id = 1, Name = "Category1"},
                 new() {Id = 2, Name = "Category2"},
-                new() {Id = 3, Name = "Category3"}
+                new() {Id = 3, Name = "Category3"},
+                new() {Id = 100, Name = "Category100"},
+                new() {Id = 101, Name = "Category200"},
+                new() {Id = 102, Name = "Category300"}
             };
 
             dbContextFactory = ServiceProvider.GetService<IDbContextFactory<GroceryStoreDbContext>>();
 
             using var groceryStoreDbContext = dbContextFactory.CreateDbContext();
+            groceryStoreDbContext.Database.EnsureDeleted();
             groceryStoreDbContext.Database.EnsureCreated();
 
             groceryStoreDbContext.Set<Customer>().AddRange(customers);
