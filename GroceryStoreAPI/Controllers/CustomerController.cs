@@ -17,6 +17,7 @@ namespace GroceryStoreAPI.Controllers
             _mediator = mediator;
         }
 
+        [ServiceFilter(typeof(ModelStateValidate))]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCustomer(int id)
         {
