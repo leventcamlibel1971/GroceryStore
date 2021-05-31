@@ -47,6 +47,19 @@ namespace GroceryStoreAPI.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task Api_Get_Should_Return_NotFound()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "api/Customer/0");
+
+            // Act
+            var response = await httpClient.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
         public async Task Api_Get_All_Should_Return_Success_With_Data()
         {
             // Arrange
@@ -90,6 +103,24 @@ namespace GroceryStoreAPI.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task Api_Post_Should_Return_BadRequest()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("POST"), "api/Customer");
+            var createCustomerRequest = new CreateCustomerRequest
+            {
+                Name = null
+            };
+            request.Content = new StringContent(JsonSerializer.Serialize(createCustomerRequest, jsonSerializerOptions),
+                Encoding.UTF8, "application/json");
+            // Act
+            var response = await httpClient.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
         public async Task Api_Put_Should_Return_Success_Update_Data()
         {
             // Arrange
@@ -112,6 +143,25 @@ namespace GroceryStoreAPI.Tests.IntegrationTests
 
             updateCustomerResponse.Should().NotBeNull();
             updateCustomerResponse.Customer.Name.Should().Be("Jane Smith");
+        }
+
+        [Fact]
+        public async Task Api_Put_Should_Return_NotFound()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("PUT"), "api/Customer");
+            var updateCustomerRequest = new UpdateCustomerRequest
+            {
+                Id = 1666,
+                Name = "Jane Smith"
+            };
+            request.Content = new StringContent(JsonSerializer.Serialize(updateCustomerRequest, jsonSerializerOptions),
+                Encoding.UTF8, "application/json");
+            // Act
+            var response = await httpClient.SendAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }
